@@ -6,7 +6,7 @@ import { WebSocketService } from "../utils/WebSocketService";
 import { AuthenticationContext } from "./AuthenticationProvider";
 
 const service = new WebSocketService({
-  productUpdates: API.webSockets.productUpdates
+  updates: API.webSockets.updates
 });
 
 const initialContext = {
@@ -24,7 +24,7 @@ const WebSocketProvider: FunctionComponent<Props> = (props) => {
   const [socketContext, setSocketContext] = React.useState(initialContext);
   const authContext = React.useContext(AuthenticationContext);
   const { getAccessTokenSilently } = useAuth0()
-  const { productUpdates: deviceUpdates } = service.connections
+  const { updates: updates } = service.connections
 
   React.useEffect(() => {
     if (props.bypass) return setSocketContext({ service, connected: true });

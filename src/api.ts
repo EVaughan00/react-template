@@ -9,7 +9,7 @@ export const API = {
     },
     
     webSockets: {
-        productUpdates: `${ENV.connections.api}/${version}/live/uploads`
+        updates: `${ENV.connections.api}/${version}/updates`
     },
 
     server: {
@@ -26,22 +26,5 @@ export const API = {
             verifyReset: `${ENV.connections.api}/${version}/password/verify`, // POST
         },
 
-        product: {
-            list: `${ENV.connections.api}/${version}/products`, // GET
-        },
-
-        uploads: {
-            recentAQSync: `${ENV.connections.api}/${version}/uploads/aqsync/recent`, // GET
-            recentAQLite: `${ENV.connections.api}/${version}/uploads/aqlite/recent`, // GET
-            recentPAM: `${ENV.connections.api}/${version}/uploads/pam/recent`, // GET
-            streamAQSync: `${ENV.connections.api}/${version}/uploads/aqsync/stream`, // GET
-            streamPAM: `${ENV.connections.api}/${version}/uploads/pam/stream`, // GET
-            streamAQLite: `${ENV.connections.api}/${version}/uploads/aqlite/stream` // GET
-        },
-
-        device: {
-            listByProduct: `${ENV.connections.api}/${version}/devices/%serial%`, // GET
-            recentUploads: `${ENV.connections.api}/${version}/uploads/pam/recent` // GET
-        }
     }
 }
