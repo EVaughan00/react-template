@@ -1,0 +1,44 @@
+.title {
+
+    align-self: center;
+}
+
+.bar {
+    justify-content: space-between;
+}
+
+.columnLeft {
+    display: inline-flex;
+    align-items: center;
+}
+
+.columnRight {
+    display: inline-flex;
+    align-items: center;
+}
+
+.profilMenu {
+    overflow: visible;
+    filter: drop-shadow(0px 2px 8px rgba(0,0,0,0.32));
+    margin-top: 1.5px;
+}
+
+.Avatar {
+    width: 25px !important;
+    height: 25px !important;
+    margin-left: -3px;
+    margin-right: 13px;
+}
+
+.profileMenu::before {
+    content: none;
+    display: block;
+    position: absolute;
+    top: 0px;
+    right: 14px;
+    width: 10px;
+    height: 10px;
+    background-color: white;
+    transform: translateY(-50%) rotate(45deg);
+    z-index: 0;
+}

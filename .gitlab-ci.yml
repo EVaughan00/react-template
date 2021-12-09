@@ -1,0 +1,72 @@
+# Adapted from Florent CHAUVEAU <florent.chauveau@gmail.com>
+
+stages:
+  - build
+  - push
+  - staging
+  - deploy
+
+image: docker:18
+services:
+  - docker:dind
+Build:
+  stage: build
+  before_script:
+    # docker login asks for the password to be passed through stdin for security
+    # we use $CI_JOB_TOKEN here which is a special token provided by GitLab
+    - echo -n $CI_JOB_TOKEN | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:latest || true
+    - >
+    - docker build
+      --pull
+      --build-arg VCS_REF=$CI_COMMIT_SHA
+      --build-arg VCS_URL=$CI_PROJECT_URL
+      --build-arg ENV_FILE="$ENV_FILE"
+      --cache-from $CI_REGISTRY_IMAGE:latest
+      --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+      .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+
+Deploy to Dev:
+  image: dtzar/helm-kubectl:3.2.1
+  when: manual
+  stage: staging
+  environment:
+    name: staging
+    url: https://url.com
+  script:
+    - kubectl config set-cluster k8s --server="${URL_DEV}"
+    - kubectl config set clusters.k8s.certificate-authority-data "$CERT_DEV"
+    - kubectl config set-credentials gitlab --token="${TOKEN_DEV}"
+    - kubectl config set-context default --cluster=k8s --user=gitlab
+    - kubectl config use-context default
+
+    - sed -i "s/<COMMIT_HASH>/${CI_COMMIT_SHA}/g" k8s-web.yaml
+    - sed -i "s/<CONNECTIONS>/development/g" k8s-web.yaml
+    - sed -i "s/<AUTH0_DOMAIN>/${AUTH0_DOMAIN}/g" k8s-web.yaml
+    - sed -i "s/<CLIENT_ID>/${CLIENT_ID}/g" k8s-web.yaml
+
+    - kubectl --insecure-skip-tls-verify apply -f k8s-web.yaml
+
+Deploy to Prod:
+  image: dtzar/helm-kubectl:3.2.1
+  when: manual
+  environment:
+    name: production
+    url: https://url.com
+  only:
+    - master
+  stage: deploy
+  script:
+    - kubectl config set-cluster k8s --server="${URL_PROD}"
+    - kubectl config set clusters.k8s.certificate-authority-data "$CERT_PROD"
+    - kubectl config set-credentials gitlab --token="${TOKEN_PROD}"
+    - kubectl config set-context default --cluster=k8s --user=gitlab
+    - kubectl config use-context default
+
+    - sed -i "s/<VERSION>/${CI_COMMIT_SHA}/g" k8s-web.yaml
+    - sed -i "s/<AUTH0_DOMAIN>/${AUTH0_DOMAIN}/g" k8s-web.yaml
+    - sed -i "s/<CLIENT_ID>/${CLIENT_ID}/g" k8s-web.yaml
+
+    - kubectl --insecure-skip-tls-verify apply -f k8s-web.yaml

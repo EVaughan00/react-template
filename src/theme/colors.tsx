@@ -1,0 +1,22 @@
+export const SensorColor: Record<string, string> = {
+    "CO_A":"#03071e",
+    "CO_B": "#03071e",
+    "Ozone": "#1a759f",
+    "NO": "#b5e48c",
+    "NO2": "#99d98c",
+    "NOx": "#76c893",
+    "WindSpeed": "#4cc9f0",
+    "Temperature": "#3f37c9",
+    "RelativeHumidity": "#4361ee",
+    "BarometricPressure": "#b5179e",
+    "MeasuredCO2": "#e85d04",
+    "PM1": "#370617",
+    "PM2.5": "#6a040f",
+    "PM4": "#9d0208",
+    "PM10": "#d00000",
+    "CO2": "#faa307",
+    "CO": "#ffba08",
+    "Weather": "#1144DD",
+    "Particle": "#22DD44",
+    "PAM": "#440022"
+}

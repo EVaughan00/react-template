@@ -1,0 +1,17 @@
+.drawerHeader {
+    display: flex;
+    flex-direction: column;
+    height: 80px;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.container {
+    width: 330px;
+    flex-shrink: 0;
+}
+
+.paper {
+    width: 330px;
+    box-sizing: border-box;
+}
